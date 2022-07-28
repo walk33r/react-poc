@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 
 import Pet from "./Pet"
+import useBreedList from "./useBreedList";
 
 const SearchParams = () => {
   const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
-  const BREED = ["bird", "cat", "dog", "rabbit", "reptile"];
+  
 
   const [location, setlocation] = useState("Seattle, WA");
   const [animal, setanimal] = useState("");
   const [breed, setbreed] = useState("");
   const [pets, setpets] = useState([]);
+  const [BREED] = useBreedList(animal);
 
   useEffect(() => {
     requestPets();
@@ -20,7 +22,6 @@ const SearchParams = () => {
       `http://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
     );
     const json = await res.json();
-    console.log(json);
     setpets(json.pets);
   }
 
@@ -31,7 +32,13 @@ const SearchParams = () => {
         pets.map(pet => <Pet key={pet.id} name={pet.name} animal={pet.animal} breed={pet.breed}/>)
       }
 
-      <form>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          requestPets();
+        }}
+      >
+        
         <label htmlFor="location">
           Location
           <input
@@ -51,10 +58,6 @@ const SearchParams = () => {
               setanimal(e.target.value);
               setbreed("");
             }}
-            onBlur={(e) => {
-              setanimal(e.target.animal);
-              setbreed("");
-            }}
           >
             <option />
             {ANIMALS.map((animal) => (
@@ -63,13 +66,15 @@ const SearchParams = () => {
               </option>
             ))}
           </select>
-          <label htmlFor="breed">
+        </label>
+
+
+        <label htmlFor="breed">
             Breed
             <select
               id="breed"
               value={breed}
               onChange={(e) => setbreed(e.target.value)}
-              onBlur={(e) => setbreed(e.target.value)}
             >
               <option />
               {BREED.map((breed) => (
@@ -79,7 +84,8 @@ const SearchParams = () => {
               ))}
             </select>
           </label>
-        </label>
+
+
         <button>Submit</button>
       </form>
     </div>
