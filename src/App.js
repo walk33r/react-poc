@@ -1,16 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import Pet from "./Pet";
+
 // Here we create a Pet Component consist of 1 nested div component
 // which in turn consist of one h1,h2 and h3 component.
 // This is just a blue-print of Pet component, just like a class in java.
-const Pet = (props) => {
-  return React.createElement("div", {}, [
-    React.createElement("h1", {}, props.name),
-    React.createElement("h2", {}, props.animal),
-    React.createElement("h3", {}, props.breed),
-  ]);
-};
 
 // Here we create an App Component consist of 1 nested div component
 // which in turn consist of one h1 component and 3 Pet component.
